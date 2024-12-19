@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation Slides</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .slide {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            transition: transform 0.3s;
+        }
+        .slide h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .slide p {
+            font-size: 1.5em;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 0 10px;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <div class="slide">
+        <h1>Presentation Title</h1>
+        <p>Intro Section</p>
+    </div>
+
+    <div class="slide">
+        <h1>Portfolio Item 1</h1>
+        <p>Description of portfolio item 1.</p>
+    </div>
+
+    <div class="slide">
+        <h1>Portfolio Item 2</h1>
+        <p>Description of portfolio item 2.</p>
+    </div>
+
+    <div class="slide">
+        <h1>Portfolio Item 3</h1>
+        <p>Description of portfolio item 3.</p>
+    </div>
+
+    <div class="slide">
+        <h1>Conclusion</h1>
+        <p>Outro Section</p>
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="downloadPPT">Download PPT</button>
+        <button class="btn" id="downloadPDF">Download PDF</button>
+    </div>
+
+    <script>
+        document.getElementById('downloadPPT').addEventListener('click', function() {
+            let pptx = new PptxGenJS();
+            let slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                let pptSlide = pptx.addSlide();
+                pptSlide.addText(slide.querySelector('h1').innerText, { x: 1, y: 1, fontSize: 24, color: '000000' });
+                pptSlide.addText(slide.querySelector('p').innerText, { x: 1, y: 1.5, fontSize: 18, color: '000000' });
+            });
+            pptx.writeFile({ fileName: 'Presentation.pptx' });
+        });
+
+        document.getElementById('downloadPDF').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                doc.addPage();
+                doc.setFontSize(24);
+                doc.text(slide.querySelector('h1').innerText, 10, 20);
+                doc.setFontSize(18);
+                doc.text(slide.querySelector('p').innerText, 10, 30);
+            });
+            doc.save('Presentation.pdf');
+        });
+    </script>
+
+</body>
+</html>
